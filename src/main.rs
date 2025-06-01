@@ -3,7 +3,7 @@ use dashmap::DashMap;
 use serde::Serialize;
 use std::sync::Arc;
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
 struct Reservation {
     reservation_id: String,
     user_id: String,
