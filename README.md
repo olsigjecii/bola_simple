@@ -3,26 +3,26 @@
 > Vulnerable Endpoint (/vulnerable/users/{user_id}):
 
 ```bash
-curl http://127.0.0.1:8080/vulnerable/users/user1
-# (gets user1's data)
+curl http://127.0.0.1:8080/vulnerable/users/alice_cooper
+# (gets Alice's data)
 ```
 
 ```bash
-curl http://127.0.0.1:8080/vulnerable/users/user2 
-# (gets user2's data - BOLA exploited)
+curl http://127.0.0.1:8080/vulnerable/users/bob_marley
+#  (gets Bob's data - BOLA exploited if you are not Bob)
 ```
 
 > Secure Endpoint (/secure/users/{user_id}):
 > Requires X-Authenticated-User-ID header.
 
 ```bash
-curl -H "X-Authenticated-User-ID: user1" http://127.0.0.1:8080/secure/users/user1 
-# (Success: user1 gets own data)
+curl -H "X-Authenticated-User-ID: alice_cooper" http://127.0.0.1:8080/secure/users/alice_cooper
+# (Success: Alice gets own data)
 
-curl -H "X-Authenticated-User-ID: user1" http://127.0.0.1:8080/secure/users/user2 
-# (Fail: 403 Forbidden, user1 tries to get user2's data)
+curl -H "X-Authenticated-User-ID: alice_cooper" http://127.0.0.1:8080/secure/users/bob_marley 
+#(# (Fail: 403 Forbidden, Alice tries to get Bob's data)
 
-curl http://127.0.0.1:8080/secure/users/user1 
+curl http://127.0.0.1:8080/secure/users/alice_cooper
 #(Fail: 401 Unauthorized, missing auth header)
 ```
 

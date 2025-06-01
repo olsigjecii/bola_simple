@@ -15,26 +15,36 @@ struct Reservation {
 type Db = Arc<DashMap<String, Vec<Reservation>>>;
 
 fn populate_mock_db(db: &Db) {
-    let user1_reservations = vec![
+    let alice_reservations = vec![
         Reservation {
-            reservation_id: "res101".to_string(),
-            user_id: "user1".to_string(),
-            item_details: "Resource Alpha".to_string(),
+            reservation_id: "alice_res_701".to_string(),
+            user_id: "alice_cooper".to_string(),
+            item_details: "Conference Room 'Phoenix'".to_string(),
         },
         Reservation {
-            reservation_id: "res102".to_string(),
-            user_id: "user1".to_string(),
-            item_details: "Resource Beta".to_string(),
+            reservation_id: "alice_res_702".to_string(),
+            user_id: "alice_cooper".to_string(),
+            item_details: "Video Projector XL-100".to_string(),
         },
     ];
-    db.insert("user1".to_string(), user1_reservations);
+    db.insert("alice_cooper".to_string(), alice_reservations);
 
-    let user2_reservations = vec![Reservation {
-        reservation_id: "res201".to_string(),
-        user_id: "user2".to_string(),
-        item_details: "Resource Gamma".to_string(),
+    let bob_reservations = vec![Reservation {
+        reservation_id: "bob_res_801".to_string(),
+        user_id: "bob_marley".to_string(),
+        item_details: "Sound System 'Reggae King'".to_string(),
     }];
-    db.insert("user2".to_string(), user2_reservations);
+    db.insert("bob_marley".to_string(), bob_reservations);
+
+    let charlie_reservations = vec![
+        // Added another user for more diverse testing
+        Reservation {
+            reservation_id: "charlie_res_901".to_string(),
+            user_id: "charlie_brown".to_string(),
+            item_details: "Comic Book Collection (Vol. 1-5)".to_string(),
+        },
+    ];
+    db.insert("charlie_brown".to_string(), charlie_reservations);
 }
 
 // --- Vulnerable Handler ---
@@ -121,14 +131,14 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .app_data(app_db.clone())
-            .route(
-                "/vulnerable/users/{user_id_from_path}",
-                web::get().to(get_reservations_vulnerable),
+            .app_data(app_db.clone()) // Share DB with handlers
+            .service(
+                web::resource("/vulnerable/users/{user_id_from_path}")
+                    .route(web::get().to(get_reservations_vulnerable)),
             )
-            .route(
-                "/secure/users/{user_id_from_path}",
-                web::get().to(get_reservations_secure),
+            .service(
+                web::resource("/secure/users/{user_id_from_path}")
+                    .route(web::get().to(get_reservations_secure)),
             )
     })
     .bind(("127.0.0.1", 8080))?
