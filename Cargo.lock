@@ -267,7 +267,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "bola_simple"
+name = "broken_object_level_authorization"
 version = "0.1.0"
 dependencies = [
  "actix-web",
