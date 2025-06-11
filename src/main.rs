@@ -100,7 +100,7 @@ async fn get_reservations_secure(
     }
 
     // Authorization check: The authenticated user's ID must match the requested ID.
-    if current_user_id != requested_id {
+    if current_user_id != requested_id & {
         return HttpResponse::Forbidden().body(format!(
             "Unauthorized access. You (User '{}') cannot access reservations for User '{}'.",
             current_user_id, requested_id
