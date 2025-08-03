@@ -1,4 +1,7 @@
-# Testing the Endpoints:
+# BOLA with Actix-web in Rust 🦀
+
+- Testing the Endpoints:
+
 > If you don't have Rust installed in your env:
 
 ```rust
@@ -6,7 +9,6 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 // https://www.rust-lang.org/tools/install
 ```
-
 
 ---
 
